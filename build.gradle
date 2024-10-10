@@ -1,0 +1,41 @@
+plugins {
+    id("java")
+}
+
+group = "org.example"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets{
+    test{
+        resources{
+            srcDir file('src/test/java')
+            exclude '**/*.java'
+        }
+    }
+}
+
+dependencies {
+    testImplementation 'io.karatelabs:karate-junit5:1.5.0'
+}
+
+test {
+    useJUnitPlatform()
+
+    systemProperty "baseUrl", System.properties.getProperty("baseUrl")
+
+    systemProperty "karate.options", System.properties.getProperty("karate.options")
+    systemProperty "karate.env", System.properties.getProperty("karate.env")
+    outputs.upToDateWhen { false }
+}
+
+//tasks.test {
+//    useJUnitPlatform()
+//    systemProperty ("karate.options", System.getProperty("karate.options"))
+//    systemProperty ("karate.env", System.getProperty("karate.env"))
+//    outputs.upToDateWhen { false }
+//}
+
