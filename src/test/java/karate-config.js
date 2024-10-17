@@ -3,11 +3,12 @@ function fn() {
     karate.configure('readTimeout', 10000);
 
     return {
-        api: {
+        web: {
            baseUrl: 'https://www.saucedemo.com/'
         },
         user: {
-            name: 'karate'
+            name: 'standard_user',
+            pass: 'secret_sauce'
         }
     };
 }
