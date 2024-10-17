@@ -1,0 +1,6 @@
+{
+  "login" : {
+    "userInput": "#user-name",
+    "passInput": "#password"
+  }
+}
