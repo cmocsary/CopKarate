@@ -6,23 +6,44 @@ Feature: cop-karate-ui
     * def password = user.pass
     * call read 'locators.json'
 
+  @runTest
   Scenario: Realizar compra exitosa
-    Given input(login.userInput, username)
-    And input(login.passInput, password)
-    And click('#login-button')
-    * delay(1000).screenshot()
-    Then if(!exists("//div[@class='app_logo']")) karate.fail('El logo de la Home Page no existe')
-    * def buttonProduct = "#add-to-cart-sauce-labs-backpack"
-    * if(!exists(buttonProduct)) karate.fail('El producto Sauce Labs Backpack no existe')
-    Then click(buttonProduct)
-    And click("#shopping_cart_container")
-    And if(!exists("//div[@class='cart_list']//div[text()='Sauce Labs Backpack']")) karate.fail('El producto no aparece en el carrito')
-    And click('#checkout')
-    And input('#first-name', 'Homer')
-    And input('#last-name', 'Simpson')
-    And input('#postal-code')
-    And click('#continue')
-    * click('#finish')
-    Then if(!exists('//h2[text()="Thank you for your order!"')) karate.fail('No aparece el mensaje de compra exitoso')
-    And click('#react-burger-menu-btn')
-    And click('#logout_sidebar_link')
+    Given input(loginPage.userInput, username)
+    And input(loginPage.passInput, password)
+    And click(loginPage.loginButton)
+    Then waitFor("//div[@class='app_logo']")
+
+    * def buttonProduct = productPage.addToCartButton
+    Then waitFor(buttonProduct)
+    And click(buttonProduct)
+
+    And click(cartPage.cartLink)
+    * delay(3000)
+    * karate.call('pressEnter.js')
+    Then waitFor("//div[@class='cart_list']//div[text()='Sauce Labs Backpack']")
+    And click(cartPage.checkoutButton)
+
+    Then waitFor(checkoutPage.firstName)
+    And waitForEnabled(checkoutPage.firstName)
+    And input(checkoutPage.firstName, "Homer")
+
+    Then waitFor(checkoutPage.lastName)
+    And waitForEnabled(checkoutPage.lastName)
+    And input(checkoutPage.lastName, "Simpson")
+
+    Then waitFor(checkoutPage.postalCode)
+    And waitForEnabled(checkoutPage.postalCode)
+    And input(checkoutPage.postalCode, "4000")
+    And click(checkoutPage.continueButton)
+    And click(checkoutPage.finishButton)
+    Then waitForText(checkoutPage.thankYouMessage, 'Thank you for your order!')
+    And click(menuPage.burgerMenuButton)
+    And click(menuPage.logoutLink)
+    And quit()
+
+  @runTest
+  Scenario: Realizar login fallido
+    Given input(loginPage.userInput, 'homero')
+    And input(loginPage.passInput, 'simpson')
+    And click(loginPage.loginButton)
+    Then waitFor("//div[@class='app_logo']")
