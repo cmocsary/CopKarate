@@ -32,10 +32,13 @@ test {
     outputs.upToDateWhen { false }
 }
 
-//tasks.test {
-//    useJUnitPlatform()
-//    systemProperty ("karate.options", System.getProperty("karate.options"))
-//    systemProperty ("karate.env", System.getProperty("karate.env"))
-//    outputs.upToDateWhen { false }
-//}
+task testWithTags(type: Test) {
+    useJUnitPlatform()
+
+    systemProperty "karate.options", "--tags @runTest"
+    systemProperty "karate.env", System.properties.getProperty("karate.env")
+    outputs.upToDateWhen { false }
+    //maxParallelForks = Runtime.runtime.availableProcessors()
+    maxParallelForks = 3
+}
 
