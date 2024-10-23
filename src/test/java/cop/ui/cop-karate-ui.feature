@@ -1,14 +1,21 @@
 Feature: cop-karate-ui
 
   Background:
-    * driver web.baseUrl
-    * def username = user.name
-    * def password = user.pass
+    * configure driver = driver
+    * driver baseUrl
     * call read 'locators.json'
 
+
+  Scenario: Login exitoso
+    Given input(login.userInput, name)
+    And input(login.passInput, pass)
+    And click('#login-button')
+    * delay(1000).screenshot()
+    Then if(!exists("//div[@class='app_logo']")) karate.fail('El logo de la Home Page no existe')
+
   Scenario: Realizar compra exitosa
-    Given input(login.userInput, username)
-    And input(login.passInput, password)
+    Given input(login.userInput, name)
+    And input(login.passInput, pass)
     And click('#login-button')
     * delay(1000).screenshot()
     Then if(!exists("//div[@class='app_logo']")) karate.fail('El logo de la Home Page no existe')
