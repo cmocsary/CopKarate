@@ -25,20 +25,9 @@ dependencies {
 test {
     useJUnitPlatform()
 
+    systemProperty "karate.env", System.properties.getProperty("karate.env")
     systemProperty "baseUrl", System.properties.getProperty("baseUrl")
-
-    systemProperty "karate.options", System.properties.getProperty("karate.options")
-    systemProperty "karate.env", System.properties.getProperty("karate.env")
+    systemProperty "name", System.properties.getProperty("name")
+    systemProperty "pass", System.properties.getProperty("pass")
     outputs.upToDateWhen { false }
 }
-
-task testWithTags(type: Test) {
-    useJUnitPlatform()
-
-    systemProperty "karate.options", "--tags @runTest"
-    systemProperty "karate.env", System.properties.getProperty("karate.env")
-    outputs.upToDateWhen { false }
-    //maxParallelForks = Runtime.runtime.availableProcessors()
-    maxParallelForks = 3
-}
-
